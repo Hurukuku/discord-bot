@@ -1,6 +1,5 @@
-import discord
 from youtube_dl import YoutubeDL
-from nextcord import FFmpegPCMAudio
+from nextcord import FFmpegPCMAudio, member
 from nextcord.ext import commands
 from btoken import btoken
 import requests
@@ -13,7 +12,7 @@ channel, voice = None, None
 @client.event
 async def on_ready():
     global ista, istajson
-    ista = requests.request('GET', 'http://192.168.10.50:8080/ista')
+    ista = requests.request('GET', 'http://localhost:8080/ista')
     istajson = ista.json()
     print("bot is online")
 
@@ -88,12 +87,12 @@ async def ping(ctx):
 
 
 @client.command()
-async def msiakman(ctx, member: discord.Member = None):
+async def msiakman(ctx, mention: member = None):
     words = tuple(istajson)
-    if member:
+    if mention:
         print(type(member))
         index = random.randrange(0, len(words))
-        await member.edit(nick=f'Msiak {words[index]}')
+        await mention.edit(nick=f'Msiak {words[index]}')
         await ctx.send("Done")
     else:
         await ctx.send('Oznacz msiaka')
