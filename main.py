@@ -12,7 +12,10 @@ channel, voice = None, None
 @client.event
 async def on_ready():
     global ista, istajson
-    ista = requests.request('GET', 'http://localhost:8080/api?word=ista')
+    try:
+        ista = requests.request('GET', 'http://localhost:8080/api?word=ista')
+    except:
+        ista = requests.request('GET', 'https://8bbf-46-175-109-52.eu.ngrok.io/api?word=ista')
     istajson = ista.json()
     print("bot is online")
 
@@ -104,6 +107,21 @@ async def msiakista(ctx, count: int = 1):
     for i in range(count):
         index = random.randrange(0, len(words))
         await ctx.send(f'Msiak {words[index]}')
+
+
+@client.command()
+async def dictionary(ctx, word: str = None):
+    if word:
+        data = {
+            'word': word
+        }
+        try:
+            r = requests.post(url='http://localhost:8080/api?word=ista', json=data)
+        except:
+            r = requests.post(url='https://8bbf-46-175-109-52.eu.ngrok.io/test/1', json=data)
+        await ctx.send(r.json()['description'])
+    else:
+        await ctx.send("No word given")
 
 
 client.run(btoken)
