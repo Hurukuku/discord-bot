@@ -12,7 +12,7 @@ channel, voice = None, None
 @client.event
 async def on_ready():
     global ista, istajson
-    ista = requests.request('GET', 'http://localhost:8080/ista')
+    ista = requests.request('GET', 'http://localhost:8080/api?word=ista')
     istajson = ista.json()
     print("bot is online")
 
