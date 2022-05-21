@@ -115,9 +115,9 @@ async def dictionary(ctx, word: str = None):
             'word': word
         }
         try:
-            r = requests.post(url='http://localhost:8080/api?word=ista', json=data)
+            r = requests.post(url='http://localhost:8080/dictionary', json=data)
         except:
-            r = requests.post(url='https://8bbf-46-175-109-52.eu.ngrok.io/test/1', json=data)
+            r = requests.post(url='https://8bbf-46-175-109-52.eu.ngrok.io/dictionary', json=data)
         await ctx.send(r.json()['description'])
     else:
         await ctx.send("No word given")
