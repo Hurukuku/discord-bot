@@ -1,5 +1,5 @@
 from youtube_dl import YoutubeDL
-from nextcord import FFmpegPCMAudio, member
+from nextcord import FFmpegPCMAudio, Member
 from nextcord.ext import commands
 from btoken import btoken
 import requests
@@ -87,12 +87,12 @@ async def ping(ctx):
 
 
 @client.command()
-async def msiakman(ctx, mention: member = None):
+async def msiakman(ctx, member: Member = None):
     words = tuple(istajson)
-    if mention:
+    if member:
         print(type(member))
         index = random.randrange(0, len(words))
-        await mention.edit(nick=f'Msiak {words[index]}')
+        await member.edit(nick=f'Msiak {words[index]}')
         await ctx.send("Done")
     else:
         await ctx.send('Oznacz msiaka')
