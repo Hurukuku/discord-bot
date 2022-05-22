@@ -1,5 +1,5 @@
 from youtube_dl import YoutubeDL
-from nextcord import FFmpegPCMAudio, Member
+from nextcord import FFmpegPCMAudio, Member, Embed
 from nextcord.ext import commands
 from btoken import btoken
 import requests
@@ -91,6 +91,7 @@ async def ping(ctx):
 
 @client.command()
 async def msiakman(ctx, member: Member = None):
+    print(f'msiakman {member}')
     await ctx.message.delete()
     words = tuple(istajson)
     if member:
@@ -102,6 +103,7 @@ async def msiakman(ctx, member: Member = None):
 
 @client.command()
 async def msiakista(ctx, count: int = 1):
+    print(f'msiakista {count}')
     words = tuple(istajson)
     for i in range(count):
         index = random.randrange(0, len(words))
@@ -114,11 +116,41 @@ async def dictionary(ctx, word: str = None):
         data = {
             'word': word
         }
+        print(f'dictionary {word}')
         try:
             r = requests.post(url='http://localhost:8080/dictionary', json=data)
         except:
             r = requests.post(url='https://8bbf-46-175-109-52.eu.ngrok.io/dictionary', json=data)
-        await ctx.send(r.json()['description'])
+        embed = Embed(title=word, color=0xe057ff)
+        try:
+            embed.add_field(name="Definicja: ", value=r.json()['description'], inline=False)
+        except:
+            embed.description = r.json()['error']
+        await ctx.send(embed = embed)
+    else:
+        await ctx.send("No word given")
+
+
+@client.command()
+async def urbandict(ctx, word: str = None):
+    if word:
+        data = {
+            'word': word
+        }
+        print(f'urbandict {word}')
+        try:
+            r = requests.post(url='http://localhost:8080/urban', json=data)
+        except:
+            r = requests.post(url='https://8bbf-46-175-109-52.eu.ngrok.io/urban', json=data)
+        embed = Embed(title=word, color=0xe057ff)
+        try:
+            embed.add_field(name="Description:", value=r.json()['description'], inline=False)
+            embed.add_field(name="Example:", value=r.json()['example'], inline=False)
+            embed.set_footer(text=r.json()['contributor'])
+        except:
+            embed.description = r.json()['error']
+
+        await ctx.send(embed=embed)
     else:
         await ctx.send("No word given")
 
