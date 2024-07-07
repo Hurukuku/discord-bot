@@ -1,11 +1,14 @@
 from youtube_dl import YoutubeDL
-from nextcord import FFmpegPCMAudio, Member, Embed
+from nextcord import FFmpegPCMAudio, Member, Embed, Intents
 from nextcord.ext import commands
 from btoken import btoken
 import requests
 import random
 
-client = commands.Bot(command_prefix="*")
+intents = Intents.default()
+intents.message_content = True
+ 
+client = commands.Bot(command_prefix="*", intents=intents)
 channel, voice = None, None
 
 
@@ -13,9 +16,9 @@ channel, voice = None, None
 async def on_ready():
     global ista, istajson
     try:
-        ista = requests.request('GET', 'http://localhost:8080/api?word=ista')
+        ista = requests.request('GET', 'http://localhost:5000/api?word=ista')
     except:
-        ista = requests.request('GET', 'https://8bbf-46-175-109-52.eu.ngrok.io/api?word=ista')
+        ista = requests.request('GET', 'http://192.168.1.10:5000/api?word=ista')
     istajson = ista.json()
     print("bot is online")
 
@@ -118,9 +121,9 @@ async def dictionary(ctx, word: str = None):
         }
         print(f'dictionary {word}')
         try:
-            r = requests.post(url='http://localhost:8080/dictionary', json=data)
+            r = requests.post(url='http://localhost:5000/dictionary', json=data)
         except:
-            r = requests.post(url='https://8bbf-46-175-109-52.eu.ngrok.io/dictionary', json=data)
+            r = requests.post(url='http://192.168.1.10:5000/dictionary', json=data)
         embed = Embed(title=word, color=0xe057ff)
         try:
             embed.add_field(name="Definicja: ", value=r.json()['description'], inline=False)
@@ -139,9 +142,9 @@ async def urbandict(ctx, word: str = None):
         }
         print(f'urbandict {word}')
         try:
-            r = requests.post(url='http://localhost:8080/urban', json=data)
+            r = requests.post(url='http://localhost:5000/urban', json=data)
         except:
-            r = requests.post(url='https://8bbf-46-175-109-52.eu.ngrok.io/urban', json=data)
+            r = requests.post(url='http://192.168.1.10:5000/urban', json=data)
         embed = Embed(title=word, color=0xe057ff)
         try:
             embed.add_field(name="Description:", value=r.json()['description'], inline=False)
